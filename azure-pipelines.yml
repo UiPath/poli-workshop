@@ -12,10 +12,14 @@ jobs:
         displayName: 'Build project'
         inputs:
           command: build
-          arguments: '--configuration Release /p:Version=1.0.1'
-
+          arguments: '--configuration Release /p:Version=1.0.1 --no-restore'
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish project'
+        inputs:
+          command: publish
+          arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory) --no-build'
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
         inputs:
-          targetPath: bin/Release/netcoreapp3.0
-          artifact: Release
+          targetPath: $(Build.ArtifactStagingDirectory)
+          artifact: website
