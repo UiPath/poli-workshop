@@ -12,8 +12,8 @@ jobs:
         displayName: 'Build project'
         inputs:
           command: build
-          configuration: Release
-          buildProperties: '/p:Version=1.0.1'
+          arguments: '--configuration Release /p:Version=1.0.1'
+
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
         inputs:
