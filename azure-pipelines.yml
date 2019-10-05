@@ -1,3 +1,11 @@
+trigger:
+  branches:
+    include:
+      - fake_master
+pr:
+  branches:
+    include:
+      - fake_master
 jobs:
   - job: Build
     displayName: Build and publish artifacts
@@ -17,7 +25,9 @@ jobs:
         displayName: 'Publish project'
         inputs:
           command: publish
-          arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory) --no-build'
+          publishWebProjects: True
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --no-build'
+          zipAfterPublish: True
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
         inputs:
