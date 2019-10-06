@@ -11,6 +11,10 @@ jobs:
     displayName: Build and publish artifacts
     pool:
       vmImage: windows-latest
+    variables:
+      configuration: Release
+      artifactName: website
+      version: 1.0.1
     steps:
       - task: DotNetCoreCLI@2
         displayName: 'Restore packages'
@@ -20,14 +24,14 @@ jobs:
         displayName: 'Build project'
         inputs:
           command: build
-          arguments: '--configuration Release /p:Version=1.0.1 --no-restore'
+          arguments: '--configuration $(configuration) /p:Version=$(version) --no-restore'
       - task: DotNetCoreCLI@2
         displayName: 'Publish project'
         inputs:
           command: publish
-          arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory) --no-build'
+          arguments: '--configuration $(configuration) --output $(Build.ArtifactStagingDirectory) --no-build'
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
         inputs:
           targetPath: $(Build.ArtifactStagingDirectory)
-          artifact: website
+          artifact: $(artifactName)
