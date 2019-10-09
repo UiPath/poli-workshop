@@ -23,11 +23,6 @@ jobs:
           command: build
           arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} --no-restore'
           projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
-      - task: PublishPipelineArtifact@1
-        displayName: 'Publish build artifact'
-        inputs:
-          targetPath: ${{ parameters.buildOutputPath }}
-          artifact: ${{ parameters.artifactName }}
       - task: DotNetCoreCLI@2
         displayName: 'Publish project'
         condition: eq('${{ parameters.publish }}', 'true')
