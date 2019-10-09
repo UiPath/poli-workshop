@@ -5,8 +5,7 @@ parameters:
   artifactName: null
   version: null
   publish: false
-variables:
-  outputPath: bin
+  buildOutputPath: bin
 jobs:
   - job: ${{ parameters.jobName }}
     displayName: ${{ parameters.jobName }}
@@ -22,17 +21,17 @@ jobs:
         displayName: 'Build project'
         inputs:
           command: build
-          arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} --output $(outputPath) --no-restore'
+          arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} --output ${{ parameters.buildOutputPath }} --no-restore'
           projects: ${{ parameters.projectPath }}
       - task: DotNetCoreCLI@2
         displayName: 'Publish project'
         condition: eq('${{ parameters.publish }}', 'true')
         inputs:
           command: publish
-          arguments: '--configuration ${{ parameters.configuration }} --output $(outputPath) --no-build'
+          arguments: '--configuration ${{ parameters.configuration }} --output ${{ parameters.buildOutputPath }} --no-build'
           projects: ${{ parameters.projectPath }}
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
         inputs:
-          targetPath: $(outputPath)
+          targetPath: ${{ parameters.buildOutputPath }}
           artifact: ${{ parameters.artifactName }}
