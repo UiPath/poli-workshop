@@ -1,11 +1,11 @@
 parameters:
   jobName: null
-  projectPath: null
-  configuration: null
+  projectDirectory: null
+  projectFile: null
   artifactName: null
   version: null
   publish: false
-  buildOutputPath: bin
+  configuration: Release
 jobs:
   - job: ${{ parameters.jobName }}
     displayName: ${{ parameters.jobName }}
@@ -16,22 +16,27 @@ jobs:
         displayName: 'Restore packages'
         inputs:
           command: restore
-          projects: ${{ parameters.projectPath }}
+          projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
       - task: DotNetCoreCLI@2
         displayName: 'Build project'
         inputs:
           command: build
-          arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} --output ${{ parameters.buildOutputPath }} --no-restore'
-          projects: ${{ parameters.projectPath }}
+          arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} --no-restore'
+          projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish build artifact'
+        inputs:
+          targetPath: ${{ parameters.buildOutputPath }}
+          artifact: ${{ parameters.artifactName }}
       - task: DotNetCoreCLI@2
         displayName: 'Publish project'
         condition: eq('${{ parameters.publish }}', 'true')
         inputs:
           command: publish
-          arguments: '--configuration ${{ parameters.configuration }} --output ${{ parameters.buildOutputPath }} --no-build'
-          projects: ${{ parameters.projectPath }}
+          arguments: '--configuration ${{ parameters.configuration }} --no-build'
+          projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
       - task: PublishPipelineArtifact@1
-        displayName: 'Publish artifact'
+        displayName: 'Publish publish artifact'
         inputs:
-          targetPath: ${{ parameters.buildOutputPath }}
+          targetPath: '${{ parameters.projectDirectory }}/bin/${{ parameters.configuration }}/netcoreapp3.0'
           artifact: ${{ parameters.artifactName }}

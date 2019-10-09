@@ -6,6 +6,8 @@ pr:
   branches:
     include:
       - master
+variables:
+  version: 1.0.1
 stages:
   - stage: Build
     displayName: 'Build projects'
@@ -13,17 +15,15 @@ stages:
       - template: .pipelines/build.job.yml
         parameters:
           jobName: BuildApp
-          projectPath: src/Poli.App/Poli.App.csproj
-          configuration: Release
+          projectDirectory: src/Poli.App
+          projectFile: Poli.App.csproj
           artifactName: app
-          artifactDirectory: output/app
-          version: 1.0.1
+          version: $(version)
           publish: true
       - template: .pipelines/build.job.yml
         parameters:
           jobName: BuildTests
-          projectPath: test/Poli.App.Tests/Poli.App.Tests.csproj
-          configuration: Release
+          projectDirectory: test/Poli.App.Tests
+          projectFile: Poli.App.Tests.csproj
           artifactName: tests
-          artifactDirectory: output/tests
-          version: 1.0.1
+          version: $(version)
