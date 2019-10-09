@@ -14,4 +14,9 @@ jobs:
           artifactName: ${{ parameters.artifactName }}
           targetPath: ${{ parameters.artifactDownloadPath }}
       - script: |
-          dotnet vstest ${{ parameters.artifactDownloadPath }}/**/*.Tests.dll
+          dotnet vstest ${{ parameters.artifactDownloadPath }}/**/*.Tests.dll --logger trx
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testRunner: VSTest
+          testResultsFiles: '**/*.trx'
