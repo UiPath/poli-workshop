@@ -10,6 +10,7 @@ variables:
   version: 1.0.1
   appArtifactName: app
   testsArtifactName: tests
+  azureConnectionName: Alessandro
 stages:
   - stage: Build
     displayName: 'Build projects'
@@ -44,24 +45,10 @@ stages:
     displayName: Deploy
     dependsOn: Test
     jobs:
-      - deployment: App
-        environment: App
-        variables:
-          artifactDownloadLocation: '$(System.DefaultWorkingDirectory)/artifact_downloads'
+      - template: .pipelines/deploy.job.yml
+        parameters:
+          deploymentName: App
+          environmentName: App
           appServiceName: poli-alessandro-app-we-app
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: DownloadPipelineArtifact@2
-                  inputs:
-                    artifactName: $(appArtifactName)
-                    targetPath: $(artifactDownloadLocation)
-                - task: AzureRmWebAppDeployment@4
-                  inputs:
-                    ConnectionType: AzureRM
-                    azureSubscription: Alessandro
-                    appType: webApp
-                    WebAppName: $(appServiceName)
-                    packageForLinux: '$(artifactDownloadLocation)/**/*.zip'
-          
+          artifactName: $(appArtifactName)
+          azureConnectionName: $(azureConnectionName)

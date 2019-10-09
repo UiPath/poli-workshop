@@ -1,0 +1,25 @@
+parameters:
+  deploymentName: null
+  environmentName: null
+  artifactDownloadLocation: '$(System.DefaultWorkingDirectory)/artifact_downloads'
+  appServiceName: null
+  artifactName: null
+  azureConnectionName: null
+jobs:
+  - deployment: ${{ parameters.deploymentName }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                artifactName: ${{ parameters.appArtifactName }}
+                targetPath: ${{ parameters.artifactDownloadLocation }}
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                ConnectionType: AzureRM
+                azureSubscription: ${{ parameters.azureConnectionName }}
+                appType: webApp
+                WebAppName: ${{ parameters.appServiceName }}
+                packageForLinux: '${{ parameters.artifactDownloadLocation }}/**/*.zip'
