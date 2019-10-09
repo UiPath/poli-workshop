@@ -2,6 +2,8 @@ parameters:
   jobName: null
   artifactName: null
   artifactDownloadPath: artifact_downloads
+  testAssembliesPattern: '**/*.Tests.dll'
+  testLogFileName: Tests.trx
 jobs:
   - job: ${{ parameters.jobName }}
     displayName: ${{ parameters.jobName }}
@@ -14,7 +16,7 @@ jobs:
           artifactName: ${{ parameters.artifactName }}
           targetPath: ${{ parameters.artifactDownloadPath }}
       - script: |
-          dotnet vstest ${{ parameters.artifactDownloadPath }}/**/*.Tests.dll /logger:trx
+          dotnet vstest ${{ parameters.artifactDownloadPath }}/${{ parameters.testAssembliesPattern }} /logger:trx;${{ parameters.testLogFileName }}
       - task: PublishTestResults@2
         condition: succeededOrFailed()
         inputs:
