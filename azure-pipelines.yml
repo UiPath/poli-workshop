@@ -56,7 +56,7 @@ stages:
           slotName: production
   - stage: DeployProd
     displayName: DeployProd
-    dependsOn: Test
+    dependsOn: DeployDev
     jobs:
       - template: .pipelines/deploy.job.yml
         parameters:
