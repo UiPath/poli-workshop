@@ -13,6 +13,7 @@ stages:
       - template: .pipelines/build.job.yml
         parameters:
           jobName: BuildApp
+          projectPath: src/Poli.App/Poli.App.csproj
           configuration: Release
           artifactName: app
           artifactDirectory: output/app
@@ -20,6 +21,7 @@ stages:
       - template: .pipelines/build.job.yml
         parameters:
           jobName: BuildTests
+          projectPath: test/Poli.App.Tests/Poli.App.Tests.csproj
           configuration: Release
           artifactName: tests
           artifactDirectory: output/tests
