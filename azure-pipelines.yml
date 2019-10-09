@@ -56,7 +56,7 @@ stages:
                 - task: DownloadPipelineArtifact@2
                   inputs:
                     artifactName: $(appArtifactName)
-                    targetPath: 
+                    targetPath: $(artifactDownloadLocation)
                 - task: AzureRmWebAppDeployment@4
                   inputs:
                     ConnectionType: AzureRM
