@@ -4,7 +4,7 @@ namespace Poli.App.Core
     {
         public string GetMessage(string name)
         {
-            return string.isNullOrEmpty(name)
+            return string.IsNullOrEmpty(name)
                 ? "Hello"
                 : $"Hello {name}";
         }
