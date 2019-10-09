@@ -12,6 +12,9 @@ stages:
   - stage: Build
     displayName: 'Build projects'
     jobs:
+      - job: SetVersion
+        steps:
+          - script: echo "##vso[build.updatebuildnumber]$(version)"
       - template: .pipelines/build.job.yml
         parameters:
           jobName: BuildApp
