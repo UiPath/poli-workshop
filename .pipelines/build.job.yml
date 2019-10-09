@@ -22,7 +22,7 @@ jobs:
         displayName: 'Build project'
         inputs:
           command: build
-          arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} --no-restore'
+          arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} /p:RuntimeIdentifier=${{ parameters.publishRuntime }} --no-restore'
           projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
       - task: DotNetCoreCLI@2
         displayName: 'Publish project'
