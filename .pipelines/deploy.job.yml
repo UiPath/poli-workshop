@@ -5,7 +5,7 @@ parameters:
   appServiceName: null
   artifactName: null
   azureConnectionName: null
-  slotName: production
+  slotName: null
 jobs:
   - deployment: ${{ parameters.deploymentName }}
     environment: ${{ parameters.environmentName }}
