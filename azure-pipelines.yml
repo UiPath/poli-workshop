@@ -18,6 +18,7 @@ stages:
           artifactName: app
           artifactDirectory: output/app
           version: 1.0.1
+          publish: true
       - template: .pipelines/build.job.yml
         parameters:
           jobName: BuildTests
