@@ -14,5 +14,5 @@ jobs:
       - task: DotNetCoreCLI@2
         inputs:
           command: custom
-          custom: 'vstest **/*.Tests.dll'
-          
+          custom: vstest
+          arguments: '**/*.Tests.dll'
