@@ -8,6 +8,8 @@ pr:
       - master
 variables:
   version: 1.0.1
+  appArtifactName: app
+  testsArtifactName: tests
 stages:
   - stage: Build
     displayName: 'Build projects'
@@ -20,7 +22,7 @@ stages:
           jobName: BuildApp
           projectDirectory: src/Poli.App
           projectFile: Poli.App.csproj
-          artifactName: app
+          artifactName: $(appArtifactName)
           version: $(version)
           publish: true
       - template: .pipelines/build.job.yml
@@ -28,7 +30,7 @@ stages:
           jobName: BuildTests
           projectDirectory: test/Poli.App.Tests
           projectFile: Poli.App.Tests.csproj
-          artifactName: tests
+          artifactName: $(testsArtifactName)
           version: $(version)
   - stage: Test
     displayName: 'Test output'
@@ -37,5 +39,29 @@ stages:
       - template: .pipelines/test.job.yml
         parameters:
           jobName: RunTests
-          artifactName: tests
+          artifactName: $(testsArtifactName)
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Test
+    jobs:
+      - deployment: App
+        environment: App
+        variables:
+          artifactDownloadLocation: '$(System.DefaultWorkingDirectory)/artifact_downloads'
+          appServiceName: poli-alessandro-app-we-app
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadPipelineArtifact@2
+                  inputs:
+                    artifactName: $(appArtifactName)
+                    targetPath: 
+                - task: AzureRmWebAppDeployment@4
+                  inputs:
+                    ConnectionType: AzureRM
+                    azureSubscription: Alessandro
+                    appType: webApp
+                    WebAppName: $(appServiceName)
+                    packageForLinux: '$(artifactDownloadLocation)/**/*.zip'
           
