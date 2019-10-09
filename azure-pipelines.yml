@@ -41,16 +41,29 @@ stages:
         parameters:
           jobName: RunTests
           artifactName: $(testsArtifactName)
-  - stage: Deploy
-    displayName: Deploy
+  - stage: DeployDev
+    displayName: DeployDev
     dependsOn: Test
     jobs:
       - template: .pipelines/deploy.job.yml
         parameters:
-          deploymentName: App
-          environmentName: App
+          deploymentName: Dev
+          environmentName: Dev
           resourceGroupName: poli-alessandro-app-we-rg
           appServiceName: poli-alessandro-app-we-app
+          artifactName: $(appArtifactName)
+          azureConnectionName: $(azureConnectionName)
+          slotName: production
+  - stage: DeployProd
+    displayName: DeployProd
+    dependsOn: Test
+    jobs:
+      - template: .pipelines/deploy.job.yml
+        parameters:
+          deploymentName: Prod
+          environmentName: Prod
+          resourceGroupName: poli-alessandro2-app-we-rg
+          appServiceName: poli-alessandro2-app-we-app
           artifactName: $(appArtifactName)
           azureConnectionName: $(azureConnectionName)
           slotName: production
