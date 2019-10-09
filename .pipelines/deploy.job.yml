@@ -25,3 +25,4 @@ jobs:
                 WebAppName: ${{ parameters.appServiceName }}
                 packageForLinux: '${{ parameters.artifactDownloadLocation }}/**/*.zip'
                 SlotName: ${{ parameters.slotName }}
+                deployToSlotOrASE: true
