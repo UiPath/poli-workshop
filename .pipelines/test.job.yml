@@ -16,7 +16,7 @@ jobs:
           artifactName: ${{ parameters.artifactName }}
           targetPath: ${{ parameters.artifactDownloadPath }}
       - script: |
-          dotnet vstest ${{ parameters.artifactDownloadPath }}/${{ parameters.testAssembliesPattern }} /logger:trx;${{ parameters.testLogFileName }}
+          dotnet vstest ${{ parameters.artifactDownloadPath }}/${{ parameters.testAssembliesPattern }} /logger:trx;LogFileName=${{ parameters.testLogFileName }}
       - task: PublishTestResults@2
         condition: succeededOrFailed()
         inputs:
