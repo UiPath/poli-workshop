@@ -52,3 +52,4 @@ stages:
           appServiceName: poli-alessandro-app-we-app
           artifactName: $(appArtifactName)
           azureConnectionName: $(azureConnectionName)
+          slotName: staging

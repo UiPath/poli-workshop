@@ -5,6 +5,7 @@ parameters:
   appServiceName: null
   artifactName: null
   azureConnectionName: null
+  slotName: production
 jobs:
   - deployment: ${{ parameters.deploymentName }}
     environment: ${{ parameters.environmentName }}
@@ -23,3 +24,4 @@ jobs:
                 appType: webApp
                 WebAppName: ${{ parameters.appServiceName }}
                 packageForLinux: '${{ parameters.artifactDownloadLocation }}/**/*.zip'
+                SlotName: ${{ parameters.slotName }}
