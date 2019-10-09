@@ -1,6 +1,7 @@
 parameters:
   jobName: null
   artifactName: null
+  artifactDownloadPath: artifact_downloads
 jobs:
   - job: ${{ parameters.jobName }}
     displayName: ${{ parameters.jobName }}
@@ -11,5 +12,6 @@ jobs:
       - task: DownloadPipelineArtifact@2
         inputs:
           artifactName: ${{ parameters.artifactName }}
+          targetPath: ${{ parameters.artifactDownloadPath }}
       - script: |
-          dotnet vstest **/*.Tests.dll
+          dotnet vstest ${{ parameters.artifactDownloadPath }}/**/*.Tests.dll
