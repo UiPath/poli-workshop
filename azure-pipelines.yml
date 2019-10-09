@@ -49,6 +49,7 @@ stages:
         parameters:
           deploymentName: App
           environmentName: App
+          resourceGroupName: poli-alessandro-app-we-rg
           appServiceName: poli-alessandro-app-we-app
           artifactName: $(appArtifactName)
           azureConnectionName: $(azureConnectionName)

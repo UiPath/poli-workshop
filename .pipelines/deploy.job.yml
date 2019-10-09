@@ -3,6 +3,7 @@ parameters:
   environmentName: null
   artifactDownloadLocation: '$(System.DefaultWorkingDirectory)/artifact_downloads'
   appServiceName: null
+  resourceGroupName: null
   artifactName: null
   azureConnectionName: null
   slotName: null
@@ -23,6 +24,7 @@ jobs:
                 azureSubscription: ${{ parameters.azureConnectionName }}
                 appType: webApp
                 WebAppName: ${{ parameters.appServiceName }}
+                ResourceGroupName: ${{ parameters.resourceGroupName }}
                 packageForLinux: '${{ parameters.artifactDownloadLocation }}/**/*.zip'
                 SlotName: ${{ parameters.slotName }}
                 deployToSlotOrASE: true
