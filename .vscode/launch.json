@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Poli.App/bin/Debug/netcoreapp3.0/Poli.App.dll",
+            "program": "${workspaceFolder}/src/Poli.App/bin/Debug/netcoreapp3.0/win-x64/Poli.App.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
