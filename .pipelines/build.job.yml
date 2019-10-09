@@ -6,6 +6,7 @@ parameters:
   version: null
   publish: false
   configuration: Release
+  publishRuntime: win-x64
 jobs:
   - job: ${{ parameters.jobName }}
     displayName: ${{ parameters.jobName }}
@@ -28,7 +29,7 @@ jobs:
         condition: eq('${{ parameters.publish }}', 'true')
         inputs:
           command: publish
-          arguments: '--configuration ${{ parameters.configuration }} --no-build'
+          arguments: '--self-contained --runtime ${{ parameters.publishRuntime }} --no-build'
           projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
       - task: PublishPipelineArtifact@1
         displayName: 'Publish publish artifact'
