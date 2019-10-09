@@ -15,19 +15,19 @@ jobs:
         displayName: 'Restore packages'
         inputs:
           command: restore
-          projects: ${{ projectPath }}
+          projects: ${{ parameters.projectPath }}
       - task: DotNetCoreCLI@2
         displayName: 'Build project'
         inputs:
           command: build
           arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} --no-restore'
-          projects: ${{ projectPath }}
+          projects: ${{ parameters.projectPath }}
       - task: DotNetCoreCLI@2
         displayName: 'Publish project'
         inputs:
           command: publish
           arguments: '--configuration ${{ parameters.configuration }} --output ${{ parameters.artifactDirectory }} --no-build'
-          projects: ${{ projectPath }}
+          projects: ${{ parameters.projectPath }}
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
         inputs:
