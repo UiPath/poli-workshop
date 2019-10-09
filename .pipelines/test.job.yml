@@ -7,6 +7,7 @@ jobs:
     pool:
       vmImage: windows-latest
     steps:
+      - checkout: none
       - task: DownloadPipelineArtifact@2
         inputs:
           artifactName: ${{ parameters.artifactName }}
