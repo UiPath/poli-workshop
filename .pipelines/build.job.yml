@@ -39,7 +39,7 @@ jobs:
           artifact: ${{ parameters.artifactName }}
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
-        condition: ne('${{ parameters.publish }}', 'false')
+        condition: eq('${{ parameters.publish }}', 'false')
         inputs:
           targetPath: '${{ parameters.projectDirectory }}/bin/${{ parameters.configuration }}/netcoreapp3.0'
           artifact: ${{ parameters.artifactName }}
