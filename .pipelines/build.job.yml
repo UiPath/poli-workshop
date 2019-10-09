@@ -29,10 +29,10 @@ jobs:
         condition: eq('${{ parameters.publish }}', 'true')
         inputs:
           command: publish
-          arguments: '--self-contained --runtime ${{ parameters.publishRuntime }} --no-build'
+          arguments: '--configuration ${{ parameters.configuration }} --self-contained --runtime ${{ parameters.publishRuntime }} --no-build'
           projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
       - task: PublishPipelineArtifact@1
         displayName: 'Publish publish artifact'
         inputs:
-          targetPath: '${{ parameters.projectDirectory }}/bin/${{ parameters.configuration }}/netcoreapp3.0'
+          targetPath: '${{ parameters.projectDirectory }}/bin/${{ parameters.configuration }}/netcoreapp3.0/${{ parameters.publishRuntime }}'
           artifact: ${{ parameters.artifactName }}
