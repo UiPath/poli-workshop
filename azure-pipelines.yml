@@ -27,3 +27,7 @@ stages:
           projectFile: Poli.App.Tests.csproj
           artifactName: tests
           version: $(version)
+      - template: .pipelines/tests.job.yml
+        parameters:
+          artifactName: tests
+          

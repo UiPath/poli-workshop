@@ -1,0 +1,17 @@
+parameters:
+  jobName: null
+  artifactName: null
+jobs:
+  - job: ${{ parameters.jobName }}
+    displayName: ${{ parameters.jobName }}
+    pool:
+      vmImage: windows-latest
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          artifactName: ${{ parameters.artifactName }}
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: custom
+          custom: 'vstest **/*.Tests.dll'
+          
