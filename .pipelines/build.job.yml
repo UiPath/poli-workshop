@@ -1,0 +1,31 @@
+parameters:
+  jobName: null
+  configuration: null
+  artifactName: null
+  artifactDirectory: null
+  version: null
+jobs:
+  - job: {{ parameters.jobName }}
+    displayName: {{ parameters.jobName }}
+    pool:
+      vmImage: windows-latest
+    steps:
+      - task: DotNetCoreCLI@2
+        displayName: 'Restore packages'
+        inputs:
+          command: restore
+      - task: DotNetCoreCLI@2
+        displayName: 'Build project'
+        inputs:
+          command: build
+          arguments: '--configuration {{ parameters.configuration }} /p:Version={{ parameters.version }} --no-restore'
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish project'
+        inputs:
+          command: publish
+          arguments: '--configuration {{ parameters.configuration }} --output {{ parameters.artifactDirectory }} --no-build'
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish artifact'
+        inputs:
+          targetPath: {{ parameters.artifactDirectory }}
+          artifact: {{ parameters.artifactName }}

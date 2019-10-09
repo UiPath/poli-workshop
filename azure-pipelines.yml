@@ -1,5 +1,26 @@
-jobs:
-  - job: HelloWorld
-    displayName: 'Hello World'
-    steps:
-      - script: echo Hello world!
+trigger:
+  branches:
+    include:
+      - master
+pr:
+  branches:
+    include:
+      - master
+stages:
+  - stage: Build
+    displayName: 'Build projects'
+    jobs:
+      - template: .pipelines/build.job.yml
+        parameters:
+          jobName: BuildApp
+          configuration: Release
+          artifactName: app
+          artifactDirectory: output/app
+          version: 1.0.1
+      - template: .pipelines/build.job.yml
+        parameters:
+          jobName: BuildTests
+          configuration: Release
+          artifactName: tests
+          artifactDirectory: output/tests
+          version: 1.0.1
