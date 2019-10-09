@@ -1,37 +1,5 @@
-trigger:
-  branches:
-    include:
-      - fake_master
-pr:
-  branches:
-    include:
-      - fake_master
 jobs:
-  - job: Build
-    displayName: Build and publish artifacts
-    pool:
-      vmImage: windows-latest
-    variables:
-      configuration: Release
-      artifactName: website
-      version: 1.0.1
+  - job: HelloWorld
+    displayName: 'Hello World'
     steps:
-      - task: DotNetCoreCLI@2
-        displayName: 'Restore packages'
-        inputs:
-          command: restore
-      - task: DotNetCoreCLI@2
-        displayName: 'Build project'
-        inputs:
-          command: build
-          arguments: '--configuration $(configuration) /p:Version=$(version) --no-restore'
-      - task: DotNetCoreCLI@2
-        displayName: 'Publish project'
-        inputs:
-          command: publish
-          arguments: '--configuration $(configuration) --output $(Build.ArtifactStagingDirectory) --no-build'
-      - task: PublishPipelineArtifact@1
-        displayName: 'Publish artifact'
-        inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)
-          artifact: $(artifactName)
+      - script: echo Hello world!
