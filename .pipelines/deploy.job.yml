@@ -1,0 +1,30 @@
+parameters:
+  deploymentName: null
+  environmentName: null
+  artifactDownloadLocation: '$(System.DefaultWorkingDirectory)/artifact_downloads'
+  appServiceName: null
+  resourceGroupName: null
+  artifactName: null
+  azureConnectionName: null
+  slotName: null
+jobs:
+  - deployment: ${{ parameters.deploymentName }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                artifactName: ${{ parameters.appArtifactName }}
+                targetPath: ${{ parameters.artifactDownloadLocation }}
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                ConnectionType: AzureRM
+                azureSubscription: ${{ parameters.azureConnectionName }}
+                appType: webApp
+                WebAppName: ${{ parameters.appServiceName }}
+                ResourceGroupName: ${{ parameters.resourceGroupName }}
+                packageForLinux: '${{ parameters.artifactDownloadLocation }}/**/*.zip'
+                SlotName: ${{ parameters.slotName }}
+                deployToSlotOrASE: true

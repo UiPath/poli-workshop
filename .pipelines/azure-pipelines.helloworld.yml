@@ -1,0 +1,5 @@
+jobs:
+  - job: HelloWorld
+    displayName: 'Hello World'
+    steps:
+      - script: echo Hello world!

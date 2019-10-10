@@ -1,0 +1,69 @@
+trigger:
+  branches:
+    include:
+      - master
+pr:
+  branches:
+    include:
+      - master
+variables:
+  version: 1.0.1
+  appArtifactName: app
+  testsArtifactName: tests
+  azureConnectionName: Alessandro
+stages:
+  - stage: Build
+    displayName: 'Build projects'
+    jobs:
+      - job: SetVersion
+        steps:
+          - script: echo "##vso[build.updatebuildnumber]$(version)"
+      - template: .pipelines/build.job.yml
+        parameters:
+          jobName: BuildApp
+          projectDirectory: src/Poli.App
+          projectFile: Poli.App.csproj
+          artifactName: $(appArtifactName)
+          version: $(version)
+          publish: true
+      - template: .pipelines/build.job.yml
+        parameters:
+          jobName: BuildTests
+          projectDirectory: test/Poli.App.Tests
+          projectFile: Poli.App.Tests.csproj
+          artifactName: $(testsArtifactName)
+          version: $(version)
+  - stage: Test
+    displayName: 'Test output'
+    dependsOn: Build
+    jobs:
+      - template: .pipelines/test.job.yml
+        parameters:
+          jobName: RunTests
+          artifactName: $(testsArtifactName)
+  - stage: DeployDev
+    displayName: DeployDev
+    dependsOn: Test
+    jobs:
+      - template: .pipelines/deploy.job.yml
+        parameters:
+          deploymentName: Dev
+          environmentName: Dev
+          resourceGroupName: poli-alessandro-app-we-rg
+          appServiceName: poli-alessandro-app-we-app
+          artifactName: $(appArtifactName)
+          azureConnectionName: $(azureConnectionName)
+          slotName: production
+  - stage: DeployProd
+    displayName: DeployProd
+    dependsOn: DeployDev
+    jobs:
+      - template: .pipelines/deploy.job.yml
+        parameters:
+          deploymentName: Prod
+          environmentName: Prod
+          resourceGroupName: poli-alessandro2-app-we-rg
+          appServiceName: poli-alessandro2-app-we-app
+          artifactName: $(appArtifactName)
+          azureConnectionName: $(azureConnectionName)
+          slotName: production
