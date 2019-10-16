@@ -1,3 +1,5 @@
+trigger: none
+pr: none
 jobs:
   - job: SimpleBuild
     displayName: SimpleBuild
