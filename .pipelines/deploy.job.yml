@@ -18,6 +18,7 @@ jobs:
               inputs:
                 artifactName: ${{ parameters.appArtifactName }}
                 targetPath: ${{ parameters.artifactDownloadLocation }}
+                
             - task: AzureRmWebAppDeployment@4
               inputs:
                 ConnectionType: AzureRM
