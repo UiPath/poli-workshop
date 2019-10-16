@@ -6,7 +6,7 @@ parameters:
   resourceGroupName: null
   artifactName: null
   azureConnectionName: null
-  slotName: null
+  slotName: production
 jobs:
   - deployment: ${{ parameters.deploymentName }}
     environment: ${{ parameters.environmentName }}

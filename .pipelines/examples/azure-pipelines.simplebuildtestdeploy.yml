@@ -4,6 +4,7 @@ variables:
   version: 1.0.1
   appArtifactName: app
   testsArtifactName: tests
+  azureConnectionName: Alessandro
 stages:
   - stage: Build
     displayName: 'Build projects'
@@ -37,3 +38,16 @@ stages:
         parameters:
           jobName: RunTests
           artifactName: $(testsArtifactName)
+
+  - stage: DeployProd
+    displayName: 'Deploy Prod'
+    dependsOn: Test
+    jobs:
+      - template: ../deploy.job.yml
+        parameters:
+          deploymentName: Prod
+          environmentName: Prod
+          resourceGroupName: poli-prod-app-we-rg
+          appServiceName: poli-prod-app-we-app
+          artifactName: $(appArtifactName)
+          azureConnectionName: $(azureConnectionName)
