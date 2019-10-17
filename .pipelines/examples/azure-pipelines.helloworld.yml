@@ -1,3 +1,5 @@
+trigger: none
+pr: none
 jobs:
   - job: HelloWorld
     displayName: 'Hello World'

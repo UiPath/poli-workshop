@@ -1,0 +1,49 @@
+parameters:
+  deploymentName: null
+  environmentName: null
+  artifactDownloadLocation: '$(System.DefaultWorkingDirectory)/artifact_downloads'
+  resourceGroupName: null
+  resourceGroupLocation: null
+  artifactName: null
+  azureConnectionName: null
+  templateFile: null
+  parametersFile: null
+jobs:
+  - deployment: ${{ parameters.deploymentName }}
+    environment: ${{ parameters.environmentName }}
+    pool:
+      vmImage: windows-latest
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                artifactName: ${{ parameters.artifactName }}
+                targetPath: ${{ parameters.artifactDownloadLocation }}
+
+            - powershell: |
+                Get-ChildItem $ENV:artifactDownloadLocation -Recurse | ForEach-Object { $_.FullName }
+              env:
+                artifactDownloadLocation: ${{ parameters.artifactDownloadLocation }}
+              
+            - task: AzurePowerShell@3
+              displayName: 'Ensure resource group exists'
+              inputs:
+                azureSubscription: ${{ parameters.azureConnectionName }}
+                azurePowerShellVersion: "LatestVersion"
+                ScriptType: InlineScript
+                Inline: |
+                  if (!(Get-AzureRmResourceGroup -Name ${{ parameters.resourceGroupName }} -ErrorAction SilentlyContinue)) {
+                    New-AzureRmResourceGroup -Name ${{ parameters.resourceGroupName }} -Location ${{ parameters.resourceGroupLocation }} -Tag @{ Owner = "alessandro@uipath.com"; Project = "Poli"; }
+                  }
+                  
+            - task: AzureResourceGroupDeployment@2
+              inputs:
+                action: 'Create Or Update Resource Group'
+                azureSubscription: ${{ parameters.azureConnectionName }}
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                location: ${{ parameters.location }}
+                templateLocation: 'Linked artifact'
+                csmFile: ${{ parameters.artifactDownloadLocation }}/${{ parameters.templateFile }}
+                csmParametersFile: ${{ parameters.artifactDownloadLocation }}/${{ parameters.parametersFile }}

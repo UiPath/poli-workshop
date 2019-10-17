@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "webAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the web app to be deployed"
+            }
+        },
+        "appServicePlanName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the app service plan to be deployed"
+            }
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for all resources"
+            }
+        },
+        "sku": {
+            "type": "string",
+            "defaultValue" : "S1",
+            "metadata": {
+                "description": "The SKU of App Service Plan. Default is Standard S1"
+            }
+        },
+        "workerSize": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "How many instances the app service plan will have. Default is 1"
+            }
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-02-01",
+            "type": "Microsoft.Web/serverfarms",
+            "kind": "app",
+            "name": "[parameters('appServicePlanName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "workerSize": "[parameters('workerSize')]"
+            },
+            "sku": {
+                "name": "[parameters('sku')]"
+            },
+            "dependsOn": []
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites",
+            "kind": "app",
+            "name": "[parameters('webAppName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+                "siteConfig": {
+                    "alwaysOn": true,
+                    "use32BitWorkerProcess": false
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+            ]
+        }
+    ]
+}

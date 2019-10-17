@@ -6,7 +6,7 @@ parameters:
   resourceGroupName: null
   artifactName: null
   azureConnectionName: null
-  slotName: null
+  slotName: production
 jobs:
   - deployment: ${{ parameters.deploymentName }}
     environment: ${{ parameters.environmentName }}
@@ -16,8 +16,9 @@ jobs:
           steps:
             - task: DownloadPipelineArtifact@2
               inputs:
-                artifactName: ${{ parameters.appArtifactName }}
+                artifactName: ${{ parameters.artifactName }}
                 targetPath: ${{ parameters.artifactDownloadLocation }}
+                
             - task: AzureRmWebAppDeployment@4
               inputs:
                 ConnectionType: AzureRM

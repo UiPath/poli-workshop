@@ -1,0 +1,40 @@
+trigger: none
+pr: none
+jobs:
+  - job: SimpleBuild
+    displayName: SimpleBuild
+    pool:
+      vmImage: windows-latest
+    variables:
+      projectDirectory: src/Poli.App
+      projectFile: Poli.App.csproj
+      artifactName: app
+      version: 1.0.1
+      publishRuntime: win-x64
+      configuration: Release
+    steps:
+      - task: DotNetCoreCLI@2
+        displayName: 'Restore packages'
+        inputs:
+          command: restore
+          projects: '$(projectDirectory)/$(projectFile)'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Build project'
+        inputs:
+          command: build
+          arguments: '--configuration $(configuration) /p:Version=$(version) --no-restore'
+          projects: '$(projectDirectory)/$(projectFile)'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish project'
+        inputs:
+          command: publish
+          arguments: '--configuration $(configuration) --self-contained --runtime $(publishRuntime) --no-build'
+          projects: '$(projectDirectory)/$(projectFile)'
+
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish artifact'
+        inputs:
+          targetPath: '$(projectDirectory)/bin/$(configuration)/netcoreapp3.0/$(publishRuntime)'
+          artifact: $(artifactName)

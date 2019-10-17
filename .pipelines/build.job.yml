@@ -18,12 +18,14 @@ jobs:
         inputs:
           command: restore
           projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
+
       - task: DotNetCoreCLI@2
         displayName: 'Build project'
         inputs:
           command: build
           arguments: '--configuration ${{ parameters.configuration }} /p:Version=${{ parameters.version }} --no-restore'
           projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
+
       - task: DotNetCoreCLI@2
         displayName: 'Publish project'
         condition: eq('${{ parameters.publish }}', 'true')
@@ -31,12 +33,14 @@ jobs:
           command: publish
           arguments: '--configuration ${{ parameters.configuration }} --self-contained --runtime ${{ parameters.publishRuntime }} --no-build'
           projects: '${{ parameters.projectDirectory }}/${{ parameters.projectFile }}'
+
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
         condition: eq('${{ parameters.publish }}', 'true')
         inputs:
           targetPath: '${{ parameters.projectDirectory }}/bin/${{ parameters.configuration }}/netcoreapp3.0/${{ parameters.publishRuntime }}'
           artifact: ${{ parameters.artifactName }}
+          
       - task: PublishPipelineArtifact@1
         displayName: 'Publish artifact'
         condition: eq('${{ parameters.publish }}', 'false')

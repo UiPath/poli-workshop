@@ -1,0 +1,53 @@
+trigger: none
+pr: none
+variables:
+  version: 1.0.1
+  appArtifactName: app
+  testsArtifactName: tests
+  azureConnectionName: Alessandro
+stages:
+  - stage: Build
+    displayName: 'Build projects'
+    jobs:
+      - job: SetVersion
+        steps:
+          - script: echo "##vso[build.updatebuildnumber]$(version)"
+
+      - template: ../build.job.yml
+        parameters:
+          jobName: BuildApp
+          projectDirectory: src/Poli.App
+          projectFile: Poli.App.csproj
+          artifactName: $(appArtifactName)
+          version: $(version)
+          publish: true
+
+      - template: ../build.job.yml
+        parameters:
+          jobName: BuildTests
+          projectDirectory: test/Poli.App.Tests
+          projectFile: Poli.App.Tests.csproj
+          artifactName: $(testsArtifactName)
+          version: $(version)
+
+  - stage: Test
+    displayName: 'Test output'
+    dependsOn: Build
+    jobs:
+      - template: ../test.job.yml
+        parameters:
+          jobName: RunTests
+          artifactName: $(testsArtifactName)
+
+  - stage: DeployProd
+    displayName: 'Deploy Prod'
+    dependsOn: Test
+    jobs:
+      - template: ../deploy.job.yml
+        parameters:
+          deploymentName: Prod
+          environmentName: Prod
+          resourceGroupName: poli-prod-app-we-rg
+          appServiceName: poli-prod-app-we-app
+          artifactName: $(appArtifactName)
+          azureConnectionName: $(azureConnectionName)
