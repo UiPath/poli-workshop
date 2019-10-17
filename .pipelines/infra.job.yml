@@ -28,6 +28,7 @@ jobs:
                 artifactDownloadLocation: ${{ parameters.artifactDownloadLocation }}
               
             - task: AzurePowerShell@3
+              displayName: 'Ensure resource group exists'
               inputs:
                 azureSubscription: ${{ parameters.azureConnectionName }}
                 azurePowerShellVersion: "LatestVersion"
