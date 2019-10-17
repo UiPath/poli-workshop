@@ -41,5 +41,6 @@ jobs:
                 azureSubscription: ${{ parameters.azureConnectionName }}
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.location }}
-                templateLocation: ${{ parameters.artifactDownloadLocation }}/${{ parameters.templateFile }}
+                templateLocation: 'Linked Artifact'
+                csmFile: ${{ parameters.artifactDownloadLocation }}/${{ parameters.templateFile }}
                 csmParametersFile: ${{ parameters.artifactDownloadLocation }}/${{ parameters.parametersFile }}
