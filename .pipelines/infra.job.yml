@@ -3,6 +3,7 @@ parameters:
   environmentName: null
   artifactDownloadLocation: '$(System.DefaultWorkingDirectory)/artifact_downloads'
   resourceGroupName: null
+  resourceGroupLocation: null
   artifactName: null
   azureConnectionName: null
   templateFile: null
@@ -24,6 +25,12 @@ jobs:
               env:
                 artifactDownloadLocation: ${{ parameters.artifactDownloadLocation }}
               
+            - task: AzurePowerShell@4
+              inputs:
+                azureSubscription: ${{ parameters.azureConnectionName }}
+                Inline: |
+                  New-AzureRmResourceGroup -Name ${{ parameters.resourceGroupName }} -Location ${{ parameters.resourceGroupLocation }} -Tag @{ Owner = "alessandro@uipath.com"; Project = "Poli"; }
+
             - task: AzureResourceGroupDeployment@2
               inputs:
                 azureSubscription: ${{ parameters.azureConnectionName }}

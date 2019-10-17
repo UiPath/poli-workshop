@@ -2,9 +2,6 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"resourceGroupName": {
-			"value": "poli-prodinfra-app-we-rg"
-		},
 		"webAppName": {
 			"value": "poli-prodinfra-app-we-app"
 		},
@@ -19,12 +16,6 @@
 		},
 		"workerSize": {
 			"value": 1
-		},
-		"ownerUsername": {
-			"value": "alessandro@uipath.com"
-		},
-		"projectName": {
-			"value": "Poli"
 		}
     }
 }

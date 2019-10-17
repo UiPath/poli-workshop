@@ -14,12 +14,6 @@
                 "description": "Name of the app service plan to be deployed"
             }
         },
-        "resourceGroupName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the resource group in which the resources will be deployed"
-            }
-        },
         "location": {
             "type": "string",
             "metadata": {
@@ -39,32 +33,9 @@
             "metadata": {
                 "description": "How many instances the app service plan will have. Default is 1"
             }
-        },
-        "ownerUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "The email of the person who owns the resources"
-            }
-        },
-        "projectName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the project to which the resources belong"
-            }
         }
     },
     "resources": [
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "location": "[parameters('location')]",
-            "name": "[parameters('resourceGroupName')]",
-            "properties": {},
-            "tags": {
-                "Owner": "[parameters('ownerUsername')]",
-                "Project": "[parameters('projectName')]"
-            }
-        },
         {
             "apiVersion": "2018-02-01",
             "type": "Microsoft.Web/serverfarms",
@@ -77,9 +48,7 @@
             "sku": {
                 "name": "[parameters('sku')]"
             },
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', parameters('resourceGroupName'))]"
-            ]
+            "dependsOn": []
         },
         {
             "apiVersion": "2018-11-01",

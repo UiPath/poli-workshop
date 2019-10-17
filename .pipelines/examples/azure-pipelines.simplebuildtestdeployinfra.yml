@@ -58,6 +58,7 @@ stages:
           deploymentName: Prod
           environmentName: ProdWithInfra
           resourceGroupName: poli-prodinfra-app-we-rg
+          resourceGroupLocation: westeurope
           artifactName: $(infraArtifactName)
           azureConnectionName: $(azureConnectionName)
 
