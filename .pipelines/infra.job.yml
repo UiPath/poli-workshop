@@ -33,8 +33,10 @@ jobs:
                 azurePowerShellVersion: "LatestVersion"
                 ScriptType: InlineScript
                 Inline: |
-                  New-AzureRmResourceGroup -Name ${{ parameters.resourceGroupName }} -Location ${{ parameters.resourceGroupLocation }} -Tag @{ Owner = "alessandro@uipath.com"; Project = "Poli"; }
-
+                  if (!(Get-AzureRmResourceGroup -Name ${{ parameters.resourceGroupName }} -ErrorAction SilentlyContinue)) {
+                    New-AzureRmResourceGroup -Name ${{ parameters.resourceGroupName }} -Location ${{ parameters.resourceGroupLocation }} -Tag @{ Owner = "alessandro@uipath.com"; Project = "Poli"; }
+                  }
+                  
             - task: AzureResourceGroupDeployment@2
               inputs:
                 action: 'Create Or Update Resource Group'
