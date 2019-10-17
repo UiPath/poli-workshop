@@ -30,8 +30,9 @@ jobs:
             - task: AzurePowerShell@3
               inputs:
                 azureSubscription: ${{ parameters.azureConnectionName }}
+                azurePowerShellVersion: "LatestVersion"
                 Inline: |
-                  New-AzureRmResourceGroup -Name ${{ parameters.resourceGroupName }} -Location ${{ parameters.resourceGroupLocation }} -Tag @{ Owner = "alessandro@uipath.com"; Project = "Poli"; }
+                  New-AzResourceGroup -Name ${{ parameters.resourceGroupName }} -Location ${{ parameters.resourceGroupLocation }} -Tag @{ Owner = "alessandro@uipath.com"; Project = "Poli"; }
 
             - task: AzureResourceGroupDeployment@2
               inputs:
