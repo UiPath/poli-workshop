@@ -2,11 +2,11 @@ parameters:
   deploymentName: null
   environmentName: null
   artifactDownloadLocation: '$(System.DefaultWorkingDirectory)/artifact_downloads'
-  appServiceName: null
   resourceGroupName: null
   artifactName: null
   azureConnectionName: null
-  slotName: production
+  templateFile: null
+  parametersFile: null
 jobs:
   - deployment: ${{ parameters.deploymentName }}
     environment: ${{ parameters.environmentName }}
@@ -18,14 +18,16 @@ jobs:
               inputs:
                 artifactName: ${{ parameters.artifactName }}
                 targetPath: ${{ parameters.artifactDownloadLocation }}
-                
-            - task: AzureRmWebAppDeployment@4
+
+            - powershell: |
+                Get-ChildItem $ENV:artifactDownloadLocation -Recurse | ForEach-Object { $_.FullName }
+              env:
+                artifactDownloadLocation: ${{ parameters.artifactDownloadLocation }}
+              
+            - task: AzureResourceGroupDeployment@2
               inputs:
-                ConnectionType: AzureRM
                 azureSubscription: ${{ parameters.azureConnectionName }}
-                appType: webApp
-                WebAppName: ${{ parameters.appServiceName }}
-                ResourceGroupName: ${{ parameters.resourceGroupName }}
-                packageForLinux: '${{ parameters.artifactDownloadLocation }}/**/*.zip'
-                SlotName: ${{ parameters.slotName }}
-                deployToSlotOrASE: true
+                resourceGroupName: ${{ parameters.resourceGroupName }}
+                location: ${{ parameters.location }}
+                templateLocation: ${{ parameters.artifactDownloadLocation }}/${{ parameters.templateFile }}
+                csmParametersFile: ${{ parameters.artifactDownloadLocation }}/${{ parameters.parametersFile }}
