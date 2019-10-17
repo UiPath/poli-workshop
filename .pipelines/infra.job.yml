@@ -31,11 +31,13 @@ jobs:
               inputs:
                 azureSubscription: ${{ parameters.azureConnectionName }}
                 azurePowerShellVersion: "LatestVersion"
+                ScriptType: InlineScript
                 Inline: |
                   New-AzureRmResourceGroup -Name ${{ parameters.resourceGroupName }} -Location ${{ parameters.resourceGroupLocation }} -Tag @{ Owner = "alessandro@uipath.com"; Project = "Poli"; }
 
             - task: AzureResourceGroupDeployment@2
               inputs:
+                action: 'Create Or Update Resource Group'
                 azureSubscription: ${{ parameters.azureConnectionName }}
                 resourceGroupName: ${{ parameters.resourceGroupName }}
                 location: ${{ parameters.location }}
