@@ -31,6 +31,15 @@ stages:
           artifactName: $(testsArtifactName)
           version: $(version)
 
+      - job: BuildInfra
+        displayName: BuildInfra
+        steps:
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish infra artifact'
+            inputs:
+              targetPath: .infrastructure
+              artifact: $(infraArtifactName)
+
   - stage: Test
     displayName: 'Test output'
     dependsOn: Build
