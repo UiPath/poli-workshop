@@ -19,6 +19,12 @@
 		},
 		"workerSize": {
 			"value": 1
+		},
+		"ownerUsername": {
+			"value": "alessandro@uipath.com"
+		},
+		"projectName": {
+			"value": "Poli"
 		}
     }
 }
